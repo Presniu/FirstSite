@@ -2,4 +2,30 @@
 
 {% block content %}
 
+{% for post in posts %}
+<div class="article">
+<h1>{{ post.title }}</h1>
+<hr>
+  <p>{{ post.text }}</p>
+</div>
+{% endfor %}
+
+{% if page_obj.has_other_pages %}
+<ul class="pages">
+  {% if page_obj.has_previous %}
+  <li>
+    <a href="{% url 'pages' page_obj.previous_page_number %}"><</a>
+  </li>
+  {% endif %}
+  <li>
+    {{ page_obj.number }}
+  </li>
+  {% if page_obj.has_next %}
+  <li>
+    <a href="{% url 'pages' page_obj.next_page_number %}">></a>
+  </li>
+  {% endif %}
+</ul>
+{% endif %}
+
 {% endblock %}
