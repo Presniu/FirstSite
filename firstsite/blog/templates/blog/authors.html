@@ -1,0 +1,14 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<div class="article">
+
+<ol>
+  {% for author in posts %}
+    <li>
+      {{author.author}} - {{author.count}}
+    </li>
+  {% endfor %}
+</ol>
+</div>
+{% endblock %}

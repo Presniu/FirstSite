@@ -1,0 +1,11 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<div class="article">
+<ul>
+  {% for tag in posts %}
+  <li>{{tag.name}}</li>
+  {% endfor %}
+</ul>
+</div>
+{% endblock %}

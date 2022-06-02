@@ -4,9 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ title }}</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'blog/images/favicon.ico' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'blog/css/styles.css' %}">
 </head>
 <body>
+<!-- Top slidebar -->
+<div class="top-slidebar">
+  <ul class="list">
+    <a class="menu" href="{% url 'home' %}">Главное меню</a>
+    <a class="menu" href="{% url 'tags' %}">Темы</a>
+    <a class="menu" href="{% url 'authors' %}">Авторы</a>
+  </ul>
+</div>
+<!-- End of slidebar -->
+
+<!-- Left slidebar -->
+<div class="left-sidebar">
+
+</div>
+<!-- End of slidebar -->
 {% block content %}
 {% endblock %}
 </body>
