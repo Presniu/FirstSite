@@ -10,11 +10,21 @@
 <body>
 <!-- Top slidebar -->
 <div class="top-slidebar">
-  <ul class="list">
-    <a class="menu" href="{% url 'home' %}">Главное меню</a>
-    <a class="menu" href="{% url 'tags' %}">Темы</a>
-    <a class="menu" href="{% url 'authors' %}">Авторы</a>
-  </ul>
+    <ul>
+        <li class="menu"><a href="{% url 'home' %}">Главное меню</a></li>
+        <li class="menu"><a href="{% url 'tags' %}">Темы</a></li>
+        <li class="menu"><a href="{% url 'authors' %}">Авторы</a></li>
+        {% if user.is_authenticated %}
+        <li class="menu"><a href="{% url 'addarticle' %}">Добавить статью</a></li>
+        {% endif %}
+        {% if user.is_authenticated %}
+        <li class="menu-right"><a href="{% url 'logout' %}">Выйти</a> </li>
+        {% else %}
+        <li class="menu-right"><a href="{% url 'registration' %}">Регистрация</a> |
+        <a href="{% url 'auth' %}">Войти</a></li>
+        {% endif %}
+    </ul>
+
 </div>
 <!-- End of slidebar -->
 

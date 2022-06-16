@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Post(models.Model):
     title = models.CharField(max_length=255, verbose_name='Заголовок')
     text = models.TextField(verbose_name='Текст')
@@ -17,6 +18,7 @@ class Post(models.Model):
 
     class Meta:
         ordering = ['time_create']
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=50, verbose_name='Название')
