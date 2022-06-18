@@ -2,7 +2,6 @@
 
 {% block content %}
 
-{% for post in posts %}
 <div class="article">
 <h1>{{ post.title }}</h1>
 <p class="auth-rel">Автор: {{post.author}}</p>
@@ -14,5 +13,5 @@
   {% endfor %}
   </p>
 </div>
-{% endfor %}
+
 {% endblock %}

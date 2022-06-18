@@ -45,6 +45,9 @@ p {
 .pages {
   display: inline-block;
   margin: 0 20px 0 0;
+  background-color: #E0FFFF;
+  padding: 10px;
+  border-radius: 25px;
 }
 
 .top-slidebar {
