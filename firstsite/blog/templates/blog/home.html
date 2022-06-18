@@ -8,13 +8,10 @@
 <p class="auth-rel">Автор: {{post.author}}</p>
 <hr>
   <p>{{ post.text }}</p>
-  <p class="tags">Теги:
+  <p>Теги:
   {% for tag in post.tags.all %}
   <a href="{% url 'tag' tag.slug %}">{{ tag }}</a>
   {% endfor %}
-  </p>
-  <p class="auth-rel">
-  <a href="{% url 'post' post.id %}">Подробнее</a>
   </p>
 </div>
 {% endfor %}
