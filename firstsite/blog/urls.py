@@ -10,6 +10,6 @@ urlpatterns = [
     path('posts/<int:page>/', Pages.as_view(), name='pages'),
     path('auth/', Auth.as_view(), name='auth'),
     path('registration/', Registration.as_view(), name='registration'),
-    path('add/', addarticle, name='addarticle'),
+    path('add/', AddArticle.as_view(), name='addarticle'),
     path('logout', logout, name='logout')
 ]

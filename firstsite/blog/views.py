@@ -1,19 +1,21 @@
 from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, FormView
 from .models import *
 from .utils import DataMixin
-from .forms import RegisterUserForm, AuthenticationForm
+from .forms import RegisterUserForm, AuthenticationForm, AddArticleForm
 from django.urls import reverse_lazy
 from django.contrib.auth import login, logout as dj_logout
 from django.contrib.auth.views import LoginView
+import datetime
 
 
 class Home(DataMixin, ListView):
     model = Post
     template_name = 'blog/home.html'
     context_object_name = 'posts'
+    ordering = ['-time_create']
 
     def get_context_data(self, *, object_list=None, **kwargs):
         content = super().get_context_data(**kwargs)
@@ -107,8 +109,38 @@ class Registration(DataMixin, CreateView):
         login(self.request, user)
         return redirect('home')
 
-def addarticle(request):
-    return HttpResponse('Add article')
+
+class AddArticle(DataMixin, FormView):
+    template_name = 'blog/newarticle.html'
+    form_class = AddArticleForm
+    success_url = reverse_lazy('home')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        extra = self.get_post_content(title='Добавление статьи')
+        return dict(list(context.items()) + list(extra.items()))
+
+    def form_valid(self, form):
+        title = form.cleaned_data['title']
+        text = form.cleaned_data['text']
+        if 'photo' in form.cleaned_data:
+            photo = form.cleaned_data['photo']
+        else:
+            photo = None
+        tags = form.cleaned_data['tags']
+        time_create = datetime.datetime.now()
+        author = self.request.user.username
+        p = Post(title=title,
+                 text=text,
+                 time_create=time_create,
+                 author=author)
+        p.save()
+        if photo:
+            p.photo = photo
+        for tag in tags:
+            p.tags.add(tag)
+        p.save()
+        return redirect('home')
 
 def logout(request):
     dj_logout(request)
