@@ -1,15 +1,22 @@
 {% extends 'blog/base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
-
-<form class="article" method="post">
-  {% csrf_token %}
-  {{ form.non_field_errors }}
-  {% for f in form %}
-    <p><label for="{{ f.id_for_label }}">{{ f.label }} : </label>{{ f }}</p>
-  {% endfor %}
-  <div>{{ form.errors }}</div>
-  <button type="submit">Войти</button>
-</form>
-
+<div class="row pt-5">
+  <div class="col-sm-3"></div>
+  <div class="col-sm-6 bg-white mt-3 px-5 py-2 h6 rounded">
+  <h2>Добро пожаловать!</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {{ form|crispy }}
+    {{ form.errors }}
+    <div class="text-center">
+    <button type="submit" class="btn btn-primary mt-3 text-center">Войти</button>
+    </div>
+  </form>
+  </div>
+  <div class="col-sm-3"></div>
+</div>
 {% endblock %}

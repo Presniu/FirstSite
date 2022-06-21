@@ -1,14 +1,23 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-<div class="article">
-
-<ol>
-  {% for author in posts %}
-    <li>
-      {{author.author}} - {{author.count}}
-    </li>
-  {% endfor %}
-</ol>
+<div class="container bg-white mt-3 px-5 pt-2 h6 rounded">
+  <h2>Все авторы</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Автор</th>
+        <th>Количество публикаций</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for author in posts %}
+      <tr>
+        <td>{{ author.author }}</td>
+        <td>{{ author.count }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
 </div>
 {% endblock %}

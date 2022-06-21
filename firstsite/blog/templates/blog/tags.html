@@ -1,11 +1,20 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-<div class="article">
+<!--<div class="article">
+<p>
 <ul>
   {% for tag in posts %}
   <li><a href="{% url 'tag' tag.slug %}">{{tag.name}}</a></li>
   {% endfor %}
 </ul>
+</p>
+</div>-->
+<div class="container bg-white mt-3 px-5 py-2 h6 rounded">
+  {% for tag in posts %}
+     <ul class="list-group">
+      <li class="list-group-item"><a href="{% url 'tag' tag.slug %}">{{tag.name}}</a></li>
+    </ul>
+  {% endfor %}
 </div>
 {% endblock %}

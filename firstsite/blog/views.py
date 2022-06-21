@@ -1,14 +1,16 @@
-from django.db.models import Count
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from django.views.generic import ListView, CreateView, FormView
-from .models import *
-from .utils import DataMixin
-from .forms import RegisterUserForm, AuthenticationForm, AddArticleForm
-from django.urls import reverse_lazy
-from django.contrib.auth import login, logout as dj_logout
-from django.contrib.auth.views import LoginView
 import datetime
+
+from django.contrib.auth import login
+from django.contrib.auth import logout as dj_logout
+from django.contrib.auth.views import LoginView
+from django.db.models import Count
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DetailView, FormView, ListView
+
+from .forms import AddArticleForm, AuthenticationForm, RegisterUserForm
+from .models import Post, Tag
+from .utils import DataMixin
 
 
 class Home(DataMixin, ListView):
@@ -19,16 +21,20 @@ class Home(DataMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         content = super().get_context_data(**kwargs)
-        extra = self.get_post_content(title="Main page")
+        extra = self.get_post_content(title="Блог")
         return dict(list(content.items()) + list(extra.items()))
 
 
-def showpost(request):
-    return HttpResponse("Post")
+class ShowPost(DataMixin, DetailView):
+    model = Post
+    template_name = "blog/post.html"
+    context_object_name = "post"
+    pk_url_kwarg = "post_id"
 
-
-def showtag(request):
-    return HttpResponse("Tags")
+    def get_context_data(self, **kwargs):
+        content = super().get_context_data()
+        extra = self.get_post_content(title=self.object.title)
+        return dict(list(content.items()) + list(extra.items()))
 
 
 class Authors(DataMixin, ListView):
@@ -71,7 +77,7 @@ class OneTag(DataMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         content = super().get_context_data(**kwargs)
         extra = self.get_post_content(
-            title=Tag.objects.get(slug=self.kwargs["tag_slug"]).name
+            title=Tag.objects.get(slug=self.kwargs["tag_slug"]).name,
         )
         return dict(list(content.items()) + list(extra.items()))
 
@@ -80,6 +86,7 @@ class Tags(DataMixin, ListView):
     model = Tag
     template_name = "blog/tags.html"
     context_object_name = "posts"
+    ordering = "name"
 
     def get_context_data(self, *, object_list=None, **kwargs):
         content = super(Tags, self).get_context_data(**kwargs)
@@ -136,13 +143,13 @@ class AddArticle(DataMixin, FormView):
         tags = form.cleaned_data["tags"]
         time_create = datetime.datetime.now()
         author = self.request.user.username
-        p = Post(title=title, text=text, time_create=time_create, author=author)
-        p.save()
+        form_data = Post(title=title, text=text, time_create=time_create, author=author)
+        form_data.save()
         if photo:
-            p.photo = photo
+            form_data.photo = photo
         for tag in tags:
-            p.tags.add(tag)
-        p.save()
+            form_data.tags.add(tag)
+        form_data.save()
         return redirect("home")
 
 

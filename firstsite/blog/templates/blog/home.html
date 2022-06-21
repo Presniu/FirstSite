@@ -1,39 +1,52 @@
 {% extends 'blog/base.html' %}
+{% load paginator_tags %}
 
 {% block content %}
 
 {% for post in posts %}
-<div class="article">
-<h1>{{ post.title }}</h1>
-<p class="auth-rel">Автор: {{post.author}}</p>
-<hr>
-  <p>{{ post.text }}</p>
-  <p>Теги:
-  {% for tag in post.tags.all %}
-  <a href="{% url 'tag' tag.slug %}">{{ tag }}</a>
-  {% endfor %}
-  </p>
+<div class="container bg-white mt-3 px-5 pt-2 h6 rounded">
+  <p class="h1 text-center">{{ post.title }}</p>
+  <p class="text-end">Автор: {{ post.author }}</p>
+  <p class="lead">{{ post.text }}</p>
+  <br>
+  <div class="navbar">
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      {% if post.tags.all %}
+      <p>Теги:
+      {% for tag in post.tags.all %}
+        <a href="{% url 'tag' tag.slug %}"><span class="badge rounded-pill bg-primary">{{ tag }}</span></a>
+      {% endfor %}
+      </p>
+      {% endif %}
+    </li>
+  </ul>
+  <ul class="navbar-nav">
+    <li class="navbar-nav ml-auto">
+      <p class="text-end mr-3"><a href="{% url 'post' post.pk %}">Подробнее</a></p>
+    </li>
+  </ul>
+  </div>
 </div>
 {% endfor %}
 
 {% if page_obj.has_other_pages %}
-<nav class="navigate">
-<ul>
+ <ul class="pagination justify-content-center">
   {% if page_obj.has_previous %}
-  <li class="pages">
-    <a href="{% url 'pages' page_obj.previous_page_number %}"><</a>
-  </li>
+    <li class="page-item"><a class="page-link" href="{% url 'pages' page_obj.previous_page_number %}">Previous</a></li>
   {% endif %}
-  <li class="pages">
-    {{ page_obj.number }}
-  </li>
+  {% get_proper_elided_page_range paginator page_obj.number as page_range %}
+  {% for page in page_range %}
+  {% if page_obj.number == page %}
+    <li class="page-item active"><a class="page-link" href="{% url 'pages' page %}">{{ page }}</a></li>
+  {% else %}
+    <li class="page-item"><a class="page-link" href="{% url 'pages' page %}">{{ page }}</a></li>
+  {% endif %}
+  {% endfor %}
   {% if page_obj.has_next %}
-  <li class="pages">
-    <a href="{% url 'pages' page_obj.next_page_number %}">></a>
-  </li>
+    <li class="page-item"><a class="page-link" href="{% url 'pages' page_obj.next_page_number %}">Next</a></li>
   {% endif %}
 </ul>
-</nav>
 
 {% endif %}
 

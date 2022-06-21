@@ -2,7 +2,6 @@
 
 {% block content %}
 
-{% for post in posts %}
 <div class="container bg-white mt-3 px-5 pt-2 h6 rounded">
   <p class="h1 text-center">{{ post.title }}</p>
   <p class="text-end">Автор: {{ post.author }}</p>
@@ -20,13 +19,6 @@
       {% endif %}
     </li>
   </ul>
-  <ul class="navbar-nav">
-    <li class="navbar-nav ml-auto">
-      <p class="text-end mr-3"><a href="{% url 'post' post.pk %}">Подробнее</a></p>
-    </li>
-  </ul>
   </div>
 </div>
-{% endfor %}
-
 {% endblock %}
